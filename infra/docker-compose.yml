@@ -1,11 +1,28 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:///./data/agent.sqlite
+      QDRANT_URL: http://qdrant:6333
+      REDIS_URL: redis://redis:6379
+      DEBUG: "false"
+    depends_on:
+      - qdrant
+      - redis
+      - postgres
+    restart: unless-stopped
+
   qdrant:
     image: qdrant/qdrant:latest
     ports:
       - "6333:6333"
     volumes:
-      - ./data/qdrant:/qdrant/storage
+      - ../data/qdrant:/qdrant/storage
     restart: unless-stopped
 
   redis:
@@ -13,5 +30,17 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./data/redis:/data
+      - ../data/redis:/data
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: slmas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../data/postgres:/var/lib/postgresql/data
     restart: unless-stopped
