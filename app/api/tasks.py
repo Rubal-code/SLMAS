@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from app.agent.executor import execute_step
 from app.agent.planner import plan_task_steps
 from app.db import add_task_steps, create_task, get_task, list_tasks, update_task_status
 
@@ -36,3 +37,11 @@ async def get_task_endpoint(task_id: str):
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
+
+
+@router.post("/{task_id}/execute")
+async def execute_task_endpoint(task_id: str):
+    task = get_task(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return execute_step(task_id)

@@ -43,10 +43,16 @@ def init_db() -> None:
                 status TEXT NOT NULL DEFAULT 'pending',
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL,
+                result TEXT DEFAULT NULL,
                 FOREIGN KEY(task_id) REFERENCES tasks(id)
             )
             """
         )
+
+        cols = conn.execute("PRAGMA table_info(task_steps)").fetchall()
+        col_names = {row[1] for row in cols}
+        if "result" not in col_names:
+            conn.execute("ALTER TABLE task_steps ADD COLUMN result TEXT DEFAULT NULL")
         conn.commit()
 
 
@@ -109,6 +115,39 @@ def update_task_status(task_id: str, status: str, result: Optional[str] = None) 
             conn.execute(
                 "UPDATE tasks SET status = ?, updated_at = ?, result = ? WHERE id = ?",
                 (status, now, result, task_id),
+            )
+        conn.commit()
+
+
+def get_next_pending_step(task_id: str) -> Optional[Dict[str, Any]]:
+    with get_connection() as conn:
+        row = conn.execute(
+            "SELECT * FROM task_steps WHERE task_id = ? AND status = 'pending' ORDER BY step_index ASC LIMIT 1",
+            (task_id,),
+        ).fetchone()
+        if not row:
+            return None
+        return {
+            "id": row["id"],
+            "task_id": row["task_id"],
+            "step_index": row["step_index"],
+            "description": row["description"],
+            "status": row["status"],
+        }
+
+
+def update_step_status(step_id: str, status: str, result: Optional[str] = None) -> None:
+    now = utc_now_iso()
+    with get_connection() as conn:
+        if result is None:
+            conn.execute(
+                "UPDATE task_steps SET status = ?, updated_at = ? WHERE id = ?",
+                (status, now, step_id),
+            )
+        else:
+            conn.execute(
+                "UPDATE task_steps SET status = ?, updated_at = ?, result = ? WHERE id = ?",
+                (status, now, result, step_id),
             )
         conn.commit()
 
