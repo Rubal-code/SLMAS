@@ -15,19 +15,23 @@ def _get_env(name: str, default: str = "") -> str:
     return os.getenv(name, default).strip()
 
 
-def generate_steps_from_goal(goal_text: str) -> List[str]:
+def generate_steps_from_goal(goal_text: str, context: List[str] | None = None) -> List[str]:
+    context = context or []
     groq_key = _get_env("GROQ_API_KEY")
     groq_url = _get_env("GROQ_API_URL", "https://api.groq.com/openai/v1")
     groq_model = _get_env("GROQ_MODEL", "llama-3.3-70b-versatile")
 
     if not groq_key:
-        return fallback_steps(goal_text)
+        return fallback_steps(goal_text, context)
 
     system_prompt = (
         "You are a planning assistant. Break the user goal into clear short steps. "
         "Return only a numbered list with 3 to 6 steps. Use concise action phrases."
     )
-    user_prompt = f"Goal: {goal_text}"
+    if context:
+        user_prompt = "Relevant past examples:\n" + "\n".join(f"- {item}" for item in context[:3]) + "\n\nGoal: " + goal_text
+    else:
+        user_prompt = f"Goal: {goal_text}"
 
     try:
         response = requests.post(
@@ -56,7 +60,7 @@ def generate_steps_from_goal(goal_text: str) -> List[str]:
     except Exception:
         pass
 
-    return fallback_steps(goal_text)
+    return fallback_steps(goal_text, context)
 
 
 def parse_steps(content: str) -> List[str]:
@@ -77,13 +81,25 @@ def parse_steps(content: str) -> List[str]:
     return cleaned[:6]
 
 
-def fallback_steps(goal_text: str) -> List[str]:
+def fallback_steps(goal_text: str, context: List[str] | None = None) -> List[str]:
     goal = _normalize_text(goal_text.strip())
     if not goal:
         return ["Understand the task and define the objective."]
-    return [
+    memory_hints = []
+    if context:
+        memory_hints = [
+            _normalize_text(item) for item in context[:3] if item and item.strip()
+        ]
+    base = [
         f"Clarify the objective behind: {goal}",
         "Break the task into smaller actionable sub-steps.",
         "Execute the highest-priority action and validate the result.",
         "Review outcomes and refine before completing the task.",
     ]
+    if memory_hints:
+        return [
+            "Use the relevant historical pattern to guide execution:",
+            *[f"- {item}" for item in memory_hints],
+            *base[1:],
+        ]
+    return base

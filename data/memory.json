@@ -1,0 +1,40 @@
+[
+  {
+    "task_id": "733a171e0f4541aa98dbcf190131836c",
+    "goal_text": "Plan a self-learning AI agent",
+    "steps": [
+      "Define the agents objectives and performance metrics."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Define the agents objectives and performance metrics.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "94889f6d01864b7bb23daaa286f8dc62",
+    "goal_text": "Build a self-learning AI agent",
+    "steps": [
+      "Define the agents objectives and learning scope."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Define the agents objectives and learning scope.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  }
+]

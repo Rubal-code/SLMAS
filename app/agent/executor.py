@@ -1,6 +1,7 @@
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
+from app.agent.memory import MemoryStore
 from app.agent.tools import mock_db, mock_search
 from app.db import get_task, get_next_pending_step, update_step_status, update_task_status
 
@@ -26,6 +27,9 @@ def execute_step(task_id: str) -> Dict[str, Any]:
         result = mock_search(description)
 
     update_step_status(next_step["id"], "completed", json.dumps({"tool": tool_name, "result": result}))
+
+    memory_store = MemoryStore()
+    memory_store.save_experience(task_id, task["goal_text"], [description], {"tool": tool_name, "result": result})
 
     remaining = get_next_pending_step(task_id)
     if remaining is None:
