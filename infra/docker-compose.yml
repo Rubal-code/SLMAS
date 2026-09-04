@@ -7,14 +7,25 @@ services:
     ports:
       - "8000:8000"
     environment:
+      DEBUG: "false"
       DATABASE_URL: sqlite:///./data/agent.sqlite
       QDRANT_URL: http://qdrant:6333
       REDIS_URL: redis://redis:6379
-      DEBUG: "false"
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_API_URL: ${GROQ_API_URL:-https://api.groq.com/openai/v1}
+      GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
     depends_on:
-      - qdrant
-      - redis
-      - postgres
+      qdrant:
+        condition: service_started
+      redis:
+        condition: service_started
+      postgres:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   qdrant:
@@ -23,6 +34,11 @@ services:
       - "6333:6333"
     volumes:
       - ../data/qdrant:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   redis:
@@ -31,6 +47,11 @@ services:
       - "6379:6379"
     volumes:
       - ../data/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   postgres:
@@ -43,4 +64,9 @@ services:
       - "5432:5432"
     volumes:
       - ../data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d slmas"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped

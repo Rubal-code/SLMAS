@@ -1,13 +1,29 @@
+import json
 import sqlite3
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timezone
 from uuid import uuid4
 
+from app.config import settings
+
 DB_PATH = Path(__file__).resolve().parents[1] / "data" / "agent.sqlite"
 
 
-def get_connection() -> sqlite3.Connection:
+def _is_postgres() -> bool:
+    return settings.database_url.startswith("postgres")
+
+
+def get_connection():
+    if _is_postgres():
+        try:
+            import psycopg
+            conn = psycopg.connect(settings.database_url)
+            conn.autocommit = False
+            return conn
+        except Exception:
+            pass
+
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -20,6 +36,38 @@ def utc_now_iso() -> str:
 
 def init_db() -> None:
     with get_connection() as conn:
+        if _is_postgres():
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS tasks (
+                    id TEXT PRIMARY KEY,
+                    goal_text TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'pending',
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    metadata TEXT DEFAULT '{}',
+                    result TEXT DEFAULT NULL
+                )
+                """
+            )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS task_steps (
+                    id TEXT PRIMARY KEY,
+                    task_id TEXT NOT NULL,
+                    step_index INTEGER NOT NULL,
+                    description TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'pending',
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    result TEXT DEFAULT NULL,
+                    CONSTRAINT fk_task_steps_task FOREIGN KEY(task_id) REFERENCES tasks(id)
+                )
+                """
+            )
+            conn.commit()
+            return
+
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS tasks (

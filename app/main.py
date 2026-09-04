@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
@@ -10,6 +11,7 @@ from app.config import settings
 from app.db import init_db
 
 load_dotenv()
+logging.basicConfig(level=logging.INFO if not settings.debug else logging.DEBUG)
 
 
 @asynccontextmanager
@@ -26,7 +28,23 @@ app.include_router(approval_router)
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "environment": "production" if not settings.debug else "development"}
+    return {
+        "status": "ok",
+        "environment": "production" if not settings.debug else "development",
+        "database_url": settings.database_url,
+        "qdrant_url": settings.qdrant_url,
+    }
+
+
+@app.get("/metrics")
+async def metrics():
+    return {
+        "service": settings.app_name,
+        "status": "ok",
+        "debug": settings.debug,
+        "database": settings.database_url,
+        "queue": settings.redis_url,
+    }
 
 
 @app.get("/")
