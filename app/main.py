@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
+from app.admin.approval import router as approval_router
+from app.admin.feedback import router as feedback_router
 from app.api.tasks import router as task_router
 from app.db import init_db
 
@@ -8,6 +10,8 @@ load_dotenv()
 
 app = FastAPI(title="SLMAS Agent", version="0.1.0")
 app.include_router(task_router)
+app.include_router(feedback_router)
+app.include_router(approval_router)
 
 
 @app.on_event("startup")
