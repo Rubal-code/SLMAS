@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 from app.agent.executor import execute_step
 from app.agent.planner import plan_task_steps
 from app.db import add_task_steps, create_task, get_task, list_tasks, update_task_status
+from app.workers.evaluator import evaluate_task
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -44,4 +45,9 @@ async def execute_task_endpoint(task_id: str):
     task = get_task(task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    return execute_step(task_id)
+    execution = execute_step(task_id)
+    evaluation = evaluate_task(task_id)
+    return {
+        "execution": execution,
+        "evaluation": evaluation,
+    }
