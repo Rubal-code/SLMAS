@@ -1,11 +1,18 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
-import os
 
-# Load environment variables from .env when present
+from app.api.tasks import router as task_router
+from app.db import init_db
+
 load_dotenv()
 
-app = FastAPI(title="SLMAS Agent (Phase 0)")
+app = FastAPI(title="SLMAS Agent", version="0.1.0")
+app.include_router(task_router)
+
+
+@app.on_event("startup")
+async def startup_event():
+    init_db()
 
 
 @app.get("/health")
@@ -15,7 +22,7 @@ async def health():
 
 @app.get("/")
 async def root():
-    return {"message": "SLMAS Agent - Phase 0 - Health OK"}
+    return {"message": "SLMAS Agent - Phase 1 API ready"}
 
 
 if __name__ == "__main__":
