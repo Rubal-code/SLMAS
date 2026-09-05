@@ -55,5 +55,252 @@
       }
     },
     "score": 1.0
+  },
+  {
+    "task_id": "9dd98e0b21de425e956fc2ba233cdb6e",
+    "goal_text": "Build a sales summary report",
+    "steps": [
+      "Collect and clean sales data sources."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Collect and clean sales data sources.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "8e6271c6ad92404fa130f777726dcbdf",
+    "goal_text": "write the code for dfs",
+    "steps": [
+      "Choose a programming language and set up the development environment."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Choose a programming language and set up the development environment.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "8e3911e93ab4473ebcf66c32d0da95f4",
+    "goal_text": "what you can do for me",
+    "steps": [
+      "Ask about your specific project or problem domain."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Ask about your specific project or problem domain.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "a67cadcf912d4f659e02a87b9f8ab4fa",
+    "goal_text": "hi",
+    "steps": [
+      "Identify the conversation partner."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Identify the conversation partner.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "8b98d891a0134740ac9c46f3fc9f0e80",
+    "goal_text": "Verify integration end to end",
+    "steps": [
+      "Identify all system components and integration points."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Identify all system components and integration points.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "258a3de7cdec4ee683872cb3ff96360a",
+    "goal_text": "Browser end to end check: plan and run a task",
+    "steps": [
+      "Define the endtoend browser task and acceptance criteria."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Define the endtoend browser task and acceptance criteria.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "82aa588bba7b46ed81ebfe134d6c9302",
+    "goal_text": "multi step completion probe",
+    "steps": [
+      "Define the probes objectives and success criteria."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Define the probes objectives and success criteria.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "82aa588bba7b46ed81ebfe134d6c9302",
+    "goal_text": "multi step completion probe",
+    "steps": [
+      "Design each step of the probe, specifying inputs, actions, and expected outputs."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Design each step of the probe, specifying inputs, actions, and expected outputs.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "82aa588bba7b46ed81ebfe134d6c9302",
+    "goal_text": "multi step completion probe",
+    "steps": [
+      "Prepare required tools, scripts, or test environments."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Prepare required tools, scripts, or test environments.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "82aa588bba7b46ed81ebfe134d6c9302",
+    "goal_text": "multi step completion probe",
+    "steps": [
+      "Execute the probe sequentially, recording results at each stage."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Execute the probe sequentially, recording results at each stage.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "82aa588bba7b46ed81ebfe134d6c9302",
+    "goal_text": "multi step completion probe",
+    "steps": [
+      "Analyze the collected data against the success criteria."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Analyze the collected data against the success criteria.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "82aa588bba7b46ed81ebfe134d6c9302",
+    "goal_text": "multi step completion probe",
+    "steps": [
+      "Refine and repeat the probe as needed to achieve complete validation."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Refine and repeat the probe as needed to achieve complete validation.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
+  },
+  {
+    "task_id": "60c9cd9b24be4e998973aa3c2b79a308",
+    "goal_text": "create a brief about ai",
+    "steps": [
+      "Define the briefs purpose and target audience."
+    ],
+    "result": {
+      "tool": "mock_search",
+      "result": {
+        "tool": "mock_search",
+        "query": "Define the briefs purpose and target audience.",
+        "results": [
+          "The task requires a structured plan and validation loop.",
+          "Use a safe execution path and review results before finalizing."
+        ]
+      }
+    },
+    "score": 1.0
   }
 ]

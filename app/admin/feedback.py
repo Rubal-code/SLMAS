@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, HTTPException
@@ -23,7 +24,7 @@ async def submit_feedback(payload: FeedbackRequest):
 
         conn.execute(
             "UPDATE tasks SET metadata = ? WHERE id = ?",
-            (str({"rating": payload.rating, "notes": payload.notes or ""}), payload.task_id),
+            (json.dumps({"rating": payload.rating, "notes": payload.notes or ""}), payload.task_id),
         )
         conn.commit()
 

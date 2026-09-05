@@ -65,9 +65,15 @@ def init_db() -> None:
                 )
                 """
             )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_task_steps_task_id ON task_steps(task_id)"
+            )
             conn.commit()
             return
 
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA foreign_keys = ON")
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS tasks (
@@ -96,12 +102,37 @@ def init_db() -> None:
             )
             """
         )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status)"
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_task_steps_task_id ON task_steps(task_id)"
+        )
 
         cols = conn.execute("PRAGMA table_info(task_steps)").fetchall()
         col_names = {row[1] for row in cols}
         if "result" not in col_names:
             conn.execute("ALTER TABLE task_steps ADD COLUMN result TEXT DEFAULT NULL")
         conn.commit()
+
+
+def database_health() -> Dict[str, Any]:
+    try:
+        with get_connection() as conn:
+            if _is_postgres():
+                conn.execute("SELECT 1")
+            else:
+                conn.execute("SELECT 1")
+        return {
+            "status": "healthy",
+            "backend": "postgres" if _is_postgres() else "sqlite",
+        }
+    except Exception as exc:  # pragma: no cover - runtime guard
+        return {
+            "status": "unhealthy",
+            "backend": "postgres" if _is_postgres() else "sqlite",
+            "error": str(exc),
+        }
 
 
 def create_task(goal_text: str, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -115,7 +146,7 @@ def create_task(goal_text: str, metadata: Optional[Dict[str, Any]] = None) -> Di
             INSERT INTO tasks (id, goal_text, status, created_at, updated_at, metadata)
             VALUES (?, ?, 'pending', ?, ?, ?)
             """,
-            (task_id, goal_text, now, now, str(data)),
+            (task_id, goal_text, now, now, json.dumps(data)),
         )
         conn.execute(
             """
